@@ -6,25 +6,25 @@ on:
       - main
 
 permissions:
+  contents: read
   pages: write
   id-token: write
-  contents: read
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Configure Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
-      - name: Upload artifact (site)
-        # use the Pages-specific uploader (v2) which avoids deprecated upload-artifact@v3
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './'
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
