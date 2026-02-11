@@ -1,0 +1,217 @@
+:root{
+  --bg-1:#0f2027;
+  --bg-2:#203a43;
+  --bg-3:#2c5364;
+  --accent:#ff6b81;
+  --accent-2:#ff9aa2;
+  --muted:#f6f6f7;
+  --glass: rgba(255,255,255,0.06);
+  --glass-2: rgba(255,255,255,0.04);
+  --card-radius:20px;
+  --max-width:820px;
+  --pad:40px;
+  --shadow: 0 10px 30px rgba(10,15,25,0.45);
+  --blur-amount-desktop: 20px;
+  --blur-amount-mobile: 12px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+
+/* Page background with subtle radial glow */
+body{
+  min-height:100vh;
+  background: linear-gradient(180deg,var(--bg-1),var(--bg-2) 40%,var(--bg-3));
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:32px;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Decorative soft glow (romantic touch) */
+body::before{
+  content:"";
+  position:fixed;
+  inset: -20% -20% auto -20%;
+  height:60vh;
+  background: radial-gradient(circle at 30% 30%, rgba(255,120,140,0.06), transparent 12%),
+              radial-gradient(circle at 80% 70%, rgba(255,200,200,0.03), transparent 8%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Container as glass card */
+.container{
+  position:relative;
+  z-index:2;
+  max-width:var(--max-width);
+  width:100%;
+  padding:var(--pad);
+  margin: auto;
+  border-radius:var(--card-radius);
+  backdrop-filter: blur(16px) saturate(120%);
+  background: linear-gradient(180deg, var(--glass), var(--glass-2));
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Heading: romantic serif with subtle shadow */
+h1{
+  font-family:'Playfair Display', serif;
+  font-weight:700;
+  color:#fff;
+  font-size:clamp(1.8rem,4.5vw,3rem);
+  margin-bottom:0.6rem;
+  letter-spacing:0.6px;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Under-title flourish */
+.subtitle{
+  display:block;
+  font-size:0.95rem;
+  margin-bottom:1.2rem;
+  color:rgba(255,255,255,0.88);
+  opacity:0.95;
+}
+
+/* Paragraphs: readable, warmer tone */
+p{
+  font-family:Inter, system-ui, sans-serif;
+  color:rgba(255,255,255,0.9);
+  font-size:clamp(1rem,2.4vw,1.15rem);
+  line-height:1.75;
+  margin-bottom:1.4rem;
+}
+
+/* Decor accent line below heading */
+.flourish{
+  width:80px;
+  height:6px;
+  margin: 0.6rem auto 1.2rem;
+  background: linear-gradient(90deg, rgba(255,107,129,0.95), rgba(255,154,162,0.85));
+  border-radius:999px;
+  box-shadow:0 6px 22px rgba(255,107,129,0.08);
+}
+
+/* Buttons: pill gradient, elegant */
+a.btn, button{
+  display:inline-inline;
+  padding:0.85rem 1.6rem;
+  border-radius:999px;
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-family:Inter, sans-serif;
+  border: none;
+  cursor:pointer;
+  transition: transform 230ms cubic-bezier(.2,.9,.3,1), box-shadow 230ms;
+  box-shadow: 0 8px 20px rgba(255,90,110,0.12);
+}
+
+/* Button hover/focus */
+a.btn:hover, button:hover{ transform: translateY(-3px); box-shadow: 0 16px 34px rgba(255,80,110,0.14); }
+a.btn:focus, button:focus{ outline:3px solid rgba(255,107,129,0.16); outline-offset:6px; }
+
+/* Heart small icon after CTA */
+a.btn.heart::after{
+  content:" ♥";
+  margin-left:8px;
+  font-size:1rem;
+  display:inline-block;
+  transform:translateY(1px);
+}
+
+/* Image: soft rounded, blurred preview */
+img.blur{
+  width:100%;
+  max-width:520px;
+  height:auto;
+  display:block;
+  margin:18px auto 8px;
+  border-radius:14px;
+  object-fit:cover;
+  filter: blur(var(--blur-amount-desktop)) saturate(120%);
+  transition: filter 600ms ease, transform 600ms ease;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+  will-change: filter, transform;
+}
+
+/* Hover (solo para punteros precisos) revela un poco la imagen */
+@media (hover: hover) and (pointer: fine){
+  /* Hover menos agresivo: revelar solo ligeramente la imagen */
+  img.blur:hover{
+    filter: blur(calc(var(--blur-amount-desktop) - 4px)) saturate(120%);
+    transform: translateY(-2px);
+  }
+}
+
+/* Menos blur en pantallas pequeñas para mejor legibilidad y rendimiento */
+@media (max-width:600px){
+  img.blur{
+    filter: blur(var(--blur-amount-mobile)) saturate(110%);
+  }
+}
+
+/* Optional reveal on hover for desktop users */
+@media (hover: hover) and (pointer: fine){
+  img.blur:hover{ filter: blur(3px) saturate(120%); transform: translateY(-6px); }
+}
+
+/* Locked notice style override (centered minimal) */
+.locked-notice{
+  max-width:520px;
+  margin:12px auto 0;
+  padding:28px;
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.12));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  color:var(--muted);
+}
+
+/* Accessibility and motion */
+:focus-visible{ outline:2px solid rgba(255,255,255,0.18); outline-offset:4px; }
+@media (prefers-reduced-motion: reduce){
+  *{animation:none;transition:none}
+  img.blur{transform:none}
+}
+
+/* Responsive tweaks */
+@media (max-width:640px){
+  .container{ padding:22px; border-radius:14px; }
+  .flourish{ width:60px; height:5px; }
+  p{ font-size:1rem; }
+}
+
+/* Floating WhatsApp quick link */
+.whatsapp{
+  position:fixed;
+  bottom:22px;
+  right:18px;
+  width:56px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:linear-gradient(180deg,#25d366,#20b358);
+  color:white;
+  font-size:1.35rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  z-index:999;
+  text-decoration:none;
+}
+
+/* small footer note */
+.small{
+  display:block;
+  margin-top:10px;
+  opacity:0.8;
+  font-size:0.92rem;
+}
+
+/* repo: https://github.com/fagarcia-Chakrabachelia/destino-nosotros.git */
