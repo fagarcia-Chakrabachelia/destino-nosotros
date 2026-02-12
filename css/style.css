@@ -356,8 +356,11 @@ img.blur{
 /* ...existing code... */
 
 /* Modal readability fixes: ensure text contrasts on white cards */
-.quiz-card{
-  color: #0b1220; /* dark text for headings/paragraphs inside white modal */
+.quiz-overlay .quiz-card{
+  color: #0b1220 !important; /* force dark text inside modal */
+  background: #ffffff !important;
 }
-.quiz-card h2{ color: #071022; }
-.quiz-card p{ color: #1a1a1a; }
+.quiz-overlay .quiz-card h2{ color: #071022 !important; }
+.quiz-overlay .quiz-card p{ color: #1a1a1a !important; }
+/* Ensure buttons inside the modal remain readable if other button rules apply */
+.quiz-overlay .quiz-card .quiz-options button{ color: #fff !important; }
