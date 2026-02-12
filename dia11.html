@@ -10,6 +10,16 @@
 <meta property="og:description" content="El lugar no se escucha… se siente.">
 <script defer src="js/main.js"></script>
 </head>
+<style>
+/* Small styles for the quiz overlay */
+.quiz-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.quiz-card{background:#fff;padding:24px;border-radius:12px;max-width:420px;width:90%;text-align:center;position:relative}
+.quiz-options{display:flex;gap:12px;justify-content:center;margin-top:16px}
+.quiz-options button{padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#222;color:#fff;padding:8px 12px;border-radius:8px;opacity:0;transition:opacity .25s}
+.hidden{display:none}
+</style>
+</head>
 <body data-unlock="2026-02-11">
 <main class="container">
     <h1>Pista #1 🌿</h1>
@@ -21,6 +31,104 @@
         y la calma abraza.
     </p>
     <img src="js/assets/blur.jpg" class="blur" alt="Vista difuminada del lugar" loading="lazy">
+    <div style="text-align:center;margin-top:18px">
+        <button id="go-day12" style="padding:10px 18px;border-radius:8px;border:0;cursor:pointer">Ir al día 12</button>
+    </div>
+
+    <div id="quiz" class="quiz-overlay hidden" aria-hidden="true">
+        <div class="quiz-card" role="dialog" aria-modal="true">
+            <h2>¿Qué hora de salida consideras adecuada?</h2>
+            <p>a) 9:00 am &nbsp; b) 8:00 am &nbsp; c) 6:00 am</p>
+            <div class="quiz-options">
+                <button id="optA" data-choice="a">a) 9:00 am</button>
+                <button id="optB" data-choice="b">b) 8:00 am</button>
+                <button id="optC" data-choice="c">c) 6:00 am</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Mensaje</div>
 </main>
+<script>
+(() => {
+    const goBtn = document.getElementById('go-day12');
+    const quiz = document.getElementById('quiz');
+    const optA = document.getElementById('optA');
+    const optB = document.getElementById('optB');
+    const optC = document.getElementById('optC');
+    const toast = document.getElementById('toast');
+    let synthPlaying = false;
+    let audioCtx, masterGain;
+
+    function showToast(msg, time=1600){
+        toast.textContent = msg; toast.style.opacity = '1';
+        clearTimeout(toast._t);
+        toast._t = setTimeout(()=>{toast.style.opacity='0'}, time);
+    }
+
+    function startMarioTune(){
+        if(synthPlaying) return; synthPlaying = true;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        masterGain = audioCtx.createGain(); masterGain.gain.value = 0.08; masterGain.connect(audioCtx.destination);
+        const notes = [523,523,0,523,0,415,494,0,392];
+        let t = audioCtx.currentTime + 0.05;
+        notes.forEach((f,i)=>{
+            if(f>0){
+                const o = audioCtx.createOscillator(); o.type='square'; o.frequency.value = f;
+                const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001,t); g.gain.exponentialRampToValueAtTime(1,t+0.02);
+                g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+                o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+0.2);
+            }
+            t += 0.18;
+        });
+    }
+
+    function stopMario(){ if(masterGain) masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.02); synthPlaying = false; }
+
+    function randomizeButton(btn){
+        const rX = Math.floor(Math.random()*60)-30; const rY = Math.floor(Math.random()*30)-15;
+        btn.style.transform = `translate(${rX}px, ${rY}px)`;
+    }
+
+    goBtn.addEventListener('click', ()=>{
+        quiz.classList.remove('hidden'); quiz.setAttribute('aria-hidden','false');
+        // start playful tune when the game starts
+        startMarioTune();
+    });
+
+    [optA, optB].forEach(opt => {
+        opt.addEventListener('mouseenter', (e)=>{
+            // move the hovered option away
+            randomizeButton(opt);
+        });
+        opt.addEventListener('click', (e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            showToast(opt.dataset.choice==='a'? 'Uy, 9am es un sueño... mejor no 😴' : '8am suena peligroso para siesta y romance 😉');
+            // shuffle positions a bit
+            randomizeButton(opt);
+            // also nudge the other wrong button
+            const other = (opt===optA)? optB : optA; randomizeButton(other);
+        });
+    });
+
+    optC.addEventListener('click', async ()=>{
+        // correct choice: stop tune, send WhatsApp to fixed Salvadoran number and go to day12
+        stopMario();
+        showToast('¡Perfecto! Confirmando y te llevo al día 12...');
+        // fixed El Salvador number provided by user: 63166710 -> with country code 503
+        const phone = '50363166710';
+        const text = encodeURIComponent('He elegido 6:00 am para la salida. ✅');
+        const url = `https://wa.me/${phone}?text=${text}`;
+        window.open(url, '_blank');
+        // navigate to dia12 after a short delay so user hears confirmation
+        setTimeout(()=>{ window.location.href = 'dia12.html'; }, 900);
+    });
+
+    // close quiz if clicked outside card
+    quiz.addEventListener('click', (e)=>{ if(e.target===quiz){ quiz.classList.add('hidden'); quiz.setAttribute('aria-hidden','true'); stopMario(); }});
+
+})();
+</script>
 </body>
 </html>

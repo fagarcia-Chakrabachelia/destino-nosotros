@@ -9,6 +9,15 @@
 <script defer src="js/main.js"></script>
 </head>
 <body data-unlock="2026-02-12">
+    <audio id="romantic" src="js/assets/music.mp3" loop></audio>
+    <script>
+        // Try to play romantic music on entry. If autoplay is blocked,
+        // user interaction (coming from dia11) should allow it; otherwise show a console hint.
+        (async ()=>{
+            const a = document.getElementById('romantic');
+            try{ await a.play(); }catch(e){ console.log('Autoplay blocked, user interaction required to play romantic track.'); }
+        })();
+    </script>
 <main class="container">
     <h1>Pista #2 🏔️</h1>
     <p>
