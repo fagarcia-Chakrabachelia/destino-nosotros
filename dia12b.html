@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Día 12b — Rompecabezas sorpresa">
+<title>Día 12b</title>
+<link rel="stylesheet" href="css/style.css">
+<script defer src="js/main.js"></script>
+</head>
+<body data-unlock="2026-02-12">
+    <audio id="bg-music" src="js/assets/ordinary.mp3" loop></audio>
+<main class="container">
+    <h1>Mi amor llegaste al día 12😏</h1>
+
+    <p id="tease-text">Ajá… ¿pensaste que sería fácil obtener la pista?
+Primero debes resolver el rompecabezas. 🧩</p>
+
+    <p>
+        <button id="music-toggle" class="btn">Reproducir música</button>
+    </p>
+
+    <!-- Preview image: drop your photo at js/assets/photo.jpg -->
+    <img id="preview-photo" class="preview" src="js/assets/photo.jpeg" alt="Vista previa" style="display:block;max-width:520px;margin:18px auto;border-radius:12px;" />
+
+    <!-- Puzzle container: hidden until preview finishes -->
+    <div id="puzzle-container" class="puzzle-container" aria-hidden="true" style="display:none;">
+        <div id="puzzle-grid" class="puzzle-grid"></div>
+        <div id="puzzle-controls" style="margin-top:14px;">
+            <button id="shuffle-btn" class="btn">Barajar</button>
+        </div>
+    </div>
+
+    <!-- Clue hidden until puzzle is solved (updated content) -->
+    <div id="clue" class="locked-notice" style="display:none; margin-top:18px;">
+        <h2>Hay lugares que lo cambian todo... 🏔️</h2>
+        <p>
+            Donde el cielo parece más cerca,<br>
+            donde el viento acaricia distinto,<br><br>
+            donde una vista puede dejarte sin palabras...<br><br>
+            Y yo quiero ver esa vista contigo.
+        </p>
+        <p style="margin-top:12px;font-size:0.95rem;opacity:0.9;">Coordenadas aproximadas: 13.763395401248763, -89.54916674364077 📍</p>
+    </div>
+    </main>
+    <script>
+        (async ()=>{
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            if(!audio) return;
+            try{ await audio.play(); if(btn) btn.textContent = 'Pausar música'; }catch(e){ console.log('Autoplay blocked; interact to enable music'); if(btn) btn.textContent = 'Reproducir música'; }
+        })();
+    </script>
+    </body>
+</html>

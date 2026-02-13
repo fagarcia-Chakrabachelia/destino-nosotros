@@ -364,3 +364,13 @@ img.blur{
 .quiz-overlay .quiz-card p{ color: #1a1a1a !important; }
 /* Ensure buttons inside the modal remain readable if other button rules apply */
 .quiz-overlay .quiz-card .quiz-options button{ color: #fff !important; }
+/* Puzzle and preview styles */
+.preview{ display:block; max-width:520px; width:100%; height:auto; border-radius:12px; box-shadow: 0 14px 40px rgba(0,0,0,0.45); }
+.hidden{ display:none !important; }
+.puzzle-container{ max-width:540px; margin:18px auto 0; }
+.puzzle-grid{ display:grid; gap:4px; margin:0 auto; touch-action: manipulation; }
+.puzzle-piece{ background-size: 100% 100%; background-repeat: no-repeat; border-radius:8px; cursor:pointer; box-shadow: 0 8px 18px rgba(0,0,0,0.35); }
+.puzzle-piece.selected{ outline:3px solid rgba(255,154,162,0.9); transform: translateY(-4px); }
+.puzzle-complete{ animation: pop 420ms ease forwards; }
+@keyframes pop{ from{ transform: scale(0.98); opacity:0.85 } to{ transform: scale(1); opacity:1 } }
+
