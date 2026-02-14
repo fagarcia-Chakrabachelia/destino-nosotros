@@ -11,17 +11,18 @@
 <body data-unlock="2026-02-12">
     <audio id="bg-music" src="js/assets/ordinary.mp3" loop></audio>
 <main class="container">
-    <h1>Mi amor llegaste al día 12😏</h1>
+    <h1>Mi amor, llegaste al día 12 😏</h1>
+    <span class="subtitle">Un pequeño reto antes de seguir...</span>
+    <div class="flourish" aria-hidden="true"></div>
 
-    <p id="tease-text">Ajá… ¿pensaste que sería fácil obtener la pista?
-Primero debes resolver el rompecabezas. 🧩</p>
+    <p id="tease-text">Ajá… ¿pensaste que sería fácil obtener la pista? Primero debes resolver el rompecabezas. 🧩</p>
 
     <p>
         <button id="music-toggle" class="btn">Reproducir música</button>
     </p>
 
     <!-- Preview image: drop your photo at js/assets/photo.jpg -->
-    <img id="preview-photo" class="preview" src="js/assets/photo.jpg" alt="Vista previa" style="display:block;max-width:520px;margin:18px auto;border-radius:12px;" />
+    <img id="preview-photo" class="blur preview" src="js/assets/photo.jpg" alt="Vista previa" />
 
     <!-- Puzzle container: hidden until preview finishes -->
     <div id="puzzle-container" class="puzzle-container" aria-hidden="true" style="display:none;">
@@ -32,7 +33,7 @@ Primero debes resolver el rompecabezas. 🧩</p>
     </div>
 
     <!-- Clue hidden until puzzle is solved (updated content) -->
-    <div id="clue" class="locked-notice" style="display:none; margin-top:18px;">
+    <div id="clue" class="locked-notice" style="display:none; margin-top:18px;" aria-hidden="true">
         <h2>Hay lugares que lo cambian todo... 🏔️</h2>
         <p>
             Donde el cielo parece más cerca,<br>
@@ -41,6 +42,9 @@ Primero debes resolver el rompecabezas. 🧩</p>
             Y yo quiero ver esa vista contigo.
         </p>
         <p style="margin-top:12px;font-size:0.95rem;opacity:0.9;">Coordenadas aproximadas: 13.763395401248763, -89.54916674364077 📍</p>
+        <p style="margin-top:14px;">
+            <a id="next-day" class="btn heart" href="dia13.html">Siguiente</a>
+        </p>
     </div>
     </main>
     <script>

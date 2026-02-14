@@ -53,7 +53,7 @@
     const shuffleBtn = document.getElementById('shuffle-btn');
     if (!preview || !puzzleGrid || !puzzleContainer || !clue) return;
 
-    const rows = 4, cols = 4;
+    const rows = 3, cols = 3;
     let pieces = [];
     let firstSelected = null;
     let solved = false;
