@@ -1,36 +1,465 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Destino revelado — 14 de Febrero.">
-<title>14 de Febrero</title>
-<link rel="stylesheet" href="css/style.css">
-<script defer src="js/main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 de Febrero — Nuestro Amanecer</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow: hidden;
+            background: black;
+        }
+
+        /* VIDEO */
+        video {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+            filter: brightness(0.25) saturate(1.05);
+        }
+
+        /* Overlay amanecer dinámico */
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 40%, rgba(255, 160, 120, 0.15), transparent 60%),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.85));
+            z-index: -2;
+        }
+
+        /* Partículas */
+        canvas {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Intro negra */
+        .intro {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            animation: introFade 4s ease forwards;
+            z-index: 10;
+        }
+
+        /* Heartbeat visual inside intro 
+        .intro .heart {
+            width: 120px;
+            height: 120px;
+            display: block;
+            background: radial-gradient(circle at 30% 30%, #ff9aa2 0%, #ff6b81 40%, #ff4f6a 100%);
+            clip-path: polygon(50% 0%, 61% 8%, 70% 21%, 70% 36%, 50% 60%, 30% 36%, 30% 21%, 39% 8%);
+            box-shadow: 0 16px 48px rgba(255, 90, 120, 0.14), inset 0 6px 16px rgba(255, 255, 255, 0.06);
+            animation: heartbeat 1.05s ease-in-out infinite;
+        }*/
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(0.88);
+                opacity: 0.9
+            }
+
+            25% {
+                transform: scale(1.05);
+                opacity: 1
+            }
+
+            40% {
+                transform: scale(0.95);
+            }
+
+            60% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: 0.92
+            }
+        }
+
+        /* Names in calligraphic style */
+        .names {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(36px, 6vw, 64px);
+            color: rgba(255, 242, 235, 0.98);
+            text-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(255, 120, 140, 0.06);
+            transform: translateY(6px) scale(0.98);
+            opacity: 0;
+            transition: all 800ms cubic-bezier(.2, .9, .3, 1);
+        }
+
+        .names.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .names .pair {
+            display: block;
+            letter-spacing: 0.6px;
+        }
+
+        /* Cinematic slow zoom on video */
+        video {
+            animation: videoZoom 120s linear forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes videoZoom {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.12);
+            }
+        }
+
+        /* Countdown styles */
+        .countdown {
+            margin-top: 18px;
+            font-family: 'Cinzel', serif;
+            color: rgba(255, 235, 230, 0.95);
+            font-size: 1.25rem;
+            letter-spacing: 1px;
+        }
+
+        .countdown .time {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-left: 8px;
+            font-weight: 700;
+        }
+
+        /* Contenido */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            opacity: 0;
+            animation: contentReveal 2s ease forwards 4s;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        p {
+            max-width: 700px;
+            line-height: 1.9;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 6s;
+        }
+
+        .btn {
+            position: relative;
+            margin-top: 35px;
+            padding: 16px 40px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #ff7a8a, #ffc3a0);
+            border: none;
+            color: #111;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: .5px;
+            transition: all .4s ease;
+            box-shadow:
+                0 15px 50px rgba(255, 120, 140, .25),
+                0 0 25px rgba(255, 215, 160, 0.15);
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 7s,
+                heartbeatBtn 2.2s ease-in-out infinite 9s;
+            overflow: hidden;
+        }
+
+        /* 💓 Latido suave */
+        @keyframes heartbeatBtn {
+            0% {
+                transform: scale(1);
+            }
+
+            10% {
+                transform: scale(1.06);
+            }
+
+            20% {
+                transform: scale(0.98);
+            }
+
+            30% {
+                transform: scale(1.04);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ✨ Brillo dorado animado */
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 235, 180, 0.6) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite 3s;
+        }
+
+        /* Movimiento del brillo */
+        @keyframes shine {
+            0% {
+                left: -75%;
+            }
+
+            100% {
+                left: 125%;
+            }
+        }
+
+        /* Hover más premium */
+        .btn:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow:
+                0 25px 70px rgba(255, 140, 160, .4),
+                0 0 40px rgba(255, 215, 160, 0.3);
+        }
+
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 25px 70px rgba(255, 140, 160, .4);
+        }
+
+        /* Animaciones */
+        @keyframes introFade {
+            0% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes contentReveal {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<body data-unlock="2026-02-14">
-<main class="container">
-    <h1>Destino revelado 💕</h1>
-    <p>
-        Este 14 de febrero…<br><br>
-        Te invito a una salida especial<br>
-        en un restaurante en la montaña 🏔️🍷<br><br>
-        Hora: 6:00 am<br>
-        Outfit: elegante y hermosa (como siempre)
-    </p>
-    <p>
-        No es solo una cita…<br>
-        es otra salida para el recuerdo eterno contigo.
-    </p>
 
-    <!-- Un solo link por día: WhatsApp (reemplaza PHONE_NUMBER por el número sin símbolos) -->
-    <a class="btn" href="https://wa.me/50363166710?text=Hola%20amor%2C%20confirmo%20la%20cita%20del%2014%2F02" target="_blank" rel="noopener noreferrer">Confirmame mi Ross por WhatsApp</a>
+<body>
 
-    <!-- Música opcional: coloca assets/music.mp3 si deseas activar -->
-    
-    <audio id="bg-music" src="js/assets/music.mp3" loop preload="none"></audio>
-    <button id="music-toggle" class="btn" type="button">Reproducir música</button>
-</main>
+    <div class="intro">
+        <div style="text-align:center;"><span class="heart" aria-hidden="true"></span>
+            <div style="height:18px"></div><strong style="color:#fff;opacity:0.95;letter-spacing:1px">Hoy… el tiempo se
+                detiene.</strong>
+        </div>
+    </div>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="js/assets/bg.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+    <canvas id="particles"></canvas>
+
+    <div class="container">
+        <div class="names" id="names"> <!-- will show Franklin & Rosy in calligraphy -->
+            <span class="pair">Franklin</span>
+            <span class="pair">&amp;</span>
+            <span class="pair">Rosy</span>
+        </div>
+
+        <h1>14 de Febrero</h1>
+
+        <p>
+            Este amanecer no es casualidad.<br>
+            Es el inicio de otro capítulo escrito contigo.
+        </p>
+
+        <p class="highlight">
+            Restaurante en la montaña 🏔️🍷<br>
+            9:00 AM — Nuestro destino
+        </p>
+
+        <div class="countdown" id="countdown">Cuenta regresiva: <span class="time"
+                id="countdown-time">cargando...</span></div>
+
+        <a class="btn"
+            href="https://wa.me/50363166710?text=Sí%20quiero%20vivir%20nuestro%20desayuno%20rom%C3%A1ntico%20contigo%20%F0%9F%92%96"
+            target="_blank">
+            Sí, quiero nuestro desayuno romántico contigo 💖
+        </a>
+
+    </div>
+
+    <script>
+        // Música suave
+        const music = new Audio("js/assets/music2.mp3");
+        music.loop = true;
+
+        document.body.addEventListener("click", () => {
+            music.play().catch(() => { });
+        }, { once: true });
+
+        // Partículas doradas
+        const canvas = document.getElementById("particles");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2,
+                d: Math.random() * 1
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(255,200,150,0.15)";
+            ctx.beginPath();
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                ctx.moveTo(p.x, p.y);
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+            }
+            ctx.fill();
+            update();
+        }
+
+        function update() {
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.y -= p.d;
+                if (p.y < 0) {
+                    p.y = canvas.height;
+                    p.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        setInterval(draw, 33);
+    </script>
+
+    <script>
+        // Additional behavior: slow video, show names after intro, countdown timer
+        const bgVideo = document.getElementById('bg-video');
+        try { if (bgVideo) bgVideo.playbackRate = 0.45; } catch (e) { console.warn(e); }
+
+        // reveal names after intro fades (~4s)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const names = document.getElementById('names');
+                if (names) names.classList.add('show');
+            }, 1700);
+        });
+
+        // Countdown to next 9:00 AM local time
+        function getNextNine() {
+            const now = new Date();
+            const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0, 0);
+            if (now >= target) target.setDate(target.getDate() + 1);
+            return target;
+        }
+
+        function updateCountdown() {
+            const target = getNextNine();
+            const now = new Date();
+            let diff = Math.max(0, Math.floor((target - now) / 1000));
+            const hours = Math.floor(diff / 3600); diff %= 3600;
+            const minutes = Math.floor(diff / 60); const seconds = diff % 60;
+            const pad = (n) => String(n).padStart(2, '0');
+            const out = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+            const el = document.getElementById('countdown-time');
+            if (el) el.textContent = out;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+
 </body>
-</html>
 
+</html>
